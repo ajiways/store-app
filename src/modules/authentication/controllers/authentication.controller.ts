@@ -1,12 +1,10 @@
 import { Body, Controller, Get, Inject, Post, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { EPermissions } from '../../../common/enums/permissions.enum';
 import { LoginResponseDTO } from '../dto/login-response.dto';
 import { LoginDTO } from '../dto/login.dto';
 import { RegisterResponseDTO } from '../dto/register-response.dto';
 import { RegisterDTO } from '../dto/register.dto';
 import { Public } from '../guards/authentication.guard';
-import { RequirePermissions } from '../guards/roles.guard';
 import { AuthenticationServiceInterface } from '../interfaces/authentication.service.interface';
 import { RequestInterface } from '../interfaces/request.interface';
 import { TokenResponse } from '../interfaces/token.response';
@@ -28,7 +26,6 @@ export class AuthenticationController {
   }
 
   @Public()
-  @RequirePermissions([EPermissions['MAKE PURCHASE']])
   @Post('/login')
   async login(
     @Body() args: LoginDTO,
@@ -76,10 +73,5 @@ export class AuthenticationController {
       token: result.token,
       userRoles: result.userRoles,
     };
-  }
-
-  @Get('/a')
-  a() {
-    return 'a';
   }
 }
