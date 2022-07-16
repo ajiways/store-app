@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { EditedEntity } from '../../../common/created.entity';
 
 @Entity('users')
-export class UserEntity {
-  @PrimaryColumn({ generated: 'uuid', primary: true, type: 'uuid' })
-  id: string;
-
+export class UserEntity extends EditedEntity {
   @Column({ type: 'varchar', length: 16, nullable: false })
   displayedName: string;
 
