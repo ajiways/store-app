@@ -13,7 +13,7 @@ export class AuthenticationStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigurationService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.env,
+      secretOrKey: configService.env.AUTHENTICATION_TOKEN_SECRET,
     });
   }
 
