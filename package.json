@@ -20,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "type-coverage": "type-coverage --ignore-catch  --ignore-non-null-assertion --at-least 100 --ignore-files \"dist/**/*\" --ignore-files \"src/migrations/**/*\" --ignore-files \"src/seeds/**/*\"",
-    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/config/typeorm/typeorm-cli.config.ts",
+    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/common/config/typeorm/typeorm-cli.config.ts",
     "migration:generate": "npm run typeorm:cli -- migration:generate -p -c migrations:generate -n",
     "migration:run": "npm run typeorm:cli -- migration:run -c migrations:create-run-revert",
     "migration:revert": "npm run typeorm:cli -- migration:revert -c migrations:create-run-revert",

@@ -15,6 +15,7 @@ const getBaseConfigPart = (): PostgresConnectionOptions => ({
   migrations: ['dist/migrations/*.js', 'dist/seeds/*.js'],
   migrationsTableName: 'migrations',
   namingStrategy: new SnakeNamingStrategy(),
+  migrationsRun: true,
   schema: 'public',
   logging: 'all',
   cli: {
