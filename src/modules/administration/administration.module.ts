@@ -7,5 +7,6 @@ const services = [UserService, UserRolesService, RolesService];
 
 @Module({
   providers: [...services],
+  exports: [...services],
 })
 export class AdministrationModule {}

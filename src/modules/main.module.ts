@@ -9,8 +9,9 @@ import { IncomingRequestInterceptor } from '../common/interceptors/incoming-requ
 import { DEFAULT_CONNECTION } from '../common/typeorm/connections';
 import { ConfigurationService } from '../common/configuration/configuration.service';
 import { AdministrationModule } from './administration/administration.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
-const modules = [AdministrationModule];
+const modules = [AdministrationModule, AuthenticationModule];
 
 @Module({
   imports: [
