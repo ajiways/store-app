@@ -6,9 +6,12 @@ import {
 import { EntityManager } from 'typeorm';
 import { ERoles } from '../../../common/enums/roles.enum';
 import { AbstractService } from '../../../common/services/abstract.service';
+import { PermissionEntity } from '../entities/permission.entity';
 import { RoleEntity } from '../entities/role.entity';
 import { UserEntity } from '../entities/user.entity';
 import { RolesServiceInterface } from '../interfaces/roles.service.interface';
+import { PermissionRolesService } from './permission-roles.service';
+import { PermissionService } from './permission.service';
 import { UserRolesService } from './user-roles.service';
 
 @Injectable()
@@ -18,6 +21,12 @@ export class RolesService
 {
   @Inject()
   private readonly userRolesService: UserRolesService;
+
+  @Inject()
+  private readonly permissionRolesService: PermissionRolesService;
+
+  @Inject()
+  private readonly permissionService: PermissionService;
 
   protected Entity = RoleEntity;
 
@@ -42,7 +51,7 @@ export class RolesService
     );
 
     return await this.findByIds(
-      userRoles.map((i) => i.id),
+      userRoles.map((i) => i.roleId),
       manager,
     );
   }
@@ -69,5 +78,27 @@ export class RolesService
     await this.userRolesService.save(existingRole, user, manager);
 
     return true;
+  }
+
+  public async getUserPermissions(
+    user: UserEntity,
+    manager: EntityManager | undefined,
+  ): Promise<PermissionEntity[]> {
+    if (!manager) {
+      manager = this.connection.manager;
+    }
+
+    const userRoles = await this.getUserRoles(user.id, manager);
+
+    const permissionRoles =
+      await this.permissionRolesService.getPermissionsByRole(
+        userRoles,
+        manager,
+      );
+
+    return await this.permissionService.findByIds(
+      permissionRoles.map((i) => i.permissionId),
+      manager,
+    );
   }
 }

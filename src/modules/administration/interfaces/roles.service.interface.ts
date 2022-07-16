@@ -1,6 +1,7 @@
 import { EntityManager } from 'typeorm';
 import { BaseServiceInterface } from '../../../common/base-service.interface';
 import { ERoles } from '../../../common/enums/roles.enum';
+import { PermissionEntity } from '../entities/permission.entity';
 import { RoleEntity } from '../entities/role.entity';
 import { UserEntity } from '../entities/user.entity';
 
@@ -13,4 +14,9 @@ export interface RolesServiceInterface
     user: UserEntity,
     manager?: EntityManager,
   ): Promise<boolean>;
+
+  getUserPermissions(
+    user: UserEntity,
+    manager?: EntityManager,
+  ): Promise<PermissionEntity[]>;
 }
