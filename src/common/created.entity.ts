@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { UserEntity } from '../modules/administration/entities/user.entity';
 
 export class CreatedEntity {
   @Column({
@@ -11,34 +12,25 @@ export class CreatedEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  //TODO: Добавить когда юзера сделаю
-  // @Column({ type: 'uuid', nullable: false })
-  // creatorId: string;
+  @Column({ type: 'uuid', nullable: false })
+  creatorId: string;
 
-  //  @ManyToOne(() => UserEntity, nullable: false)
-  //  private user: UserEntity;
+  @ManyToOne(() => UserEntity, { nullable: false })
+  private user: UserEntity;
 }
 
 export class EditedEntity extends CreatedEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  //TODO: Добавить когда юзера сделаю
-  // @Column({ type: 'uuid', nullable: false})
-  // updaterId: string;
-
-  //  @ManyToOne(() => UserEntity, nullable: false)
-  //  private user: UserEntity;
+  @Column({ type: 'uuid', nullable: false })
+  updaterId: string;
 }
 
 export class DeletedEntity extends EditedEntity {
   @Column({ type: 'date', nullable: false })
   deletedAt: Date;
 
-  //TODO: Добавить когда юзера сделаю
-  // @Column({ type: 'uuid', nullable: false})
-  // deleterId: string;
-
-  //  @ManyToOne(() => UserEntity, nullable: false)
-  //  private user: UserEntity;
+  @Column({ type: 'uuid', nullable: false })
+  deleterId: string;
 }
