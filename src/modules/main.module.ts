@@ -8,6 +8,9 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { IncomingRequestInterceptor } from '../common/interceptors/incoming-request.interceptor';
 import { DEFAULT_CONNECTION } from '../common/typeorm/connections';
 import { ConfigurationService } from '../common/configuration/configuration.service';
+import { AdministrationModule } from './administration/administration.module';
+
+const modules = [AdministrationModule];
 
 @Module({
   imports: [
@@ -20,6 +23,7 @@ import { ConfigurationService } from '../common/configuration/configuration.serv
         config.typeorm(DEFAULT_CONNECTION),
       inject: [ConfigurationService],
     }),
+    ...modules,
   ],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: IncomingRequestInterceptor },
