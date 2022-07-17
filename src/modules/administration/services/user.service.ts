@@ -1,7 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { hashSync } from 'bcrypt';
 import { EntityManager } from 'typeorm';
 import { ERoles } from '../../../common/enums/roles.enum';
 import { AbstractService } from '../../../common/services/abstract.service';
+import { InventoryService } from '../../items/services/inventory.service';
 import { SaveUserDTO } from '../dto/save-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { UserServiceInterface } from '../interfaces/user.service.interface';
@@ -14,6 +16,9 @@ export class UserService
 {
   @Inject()
   private readonly rolesService: RolesService;
+
+  @Inject()
+  private readonly inventoryService: InventoryService;
 
   protected Entity = UserEntity;
 
@@ -38,7 +43,12 @@ export class UserService
       throw new BadRequestException('Login is already taken');
     }
 
-    const user = await this.saveEntity(dto, manager);
+    const user = await this.saveEntity(
+      { ...dto, password: hashSync(dto.password, 7) },
+      manager,
+    );
+
+    await this.inventoryService.save(user, manager);
 
     await this.rolesService.addRoleToUser(ERoles.User, user, manager);
 

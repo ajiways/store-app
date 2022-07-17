@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ItemsModule } from '../items/items.module';
 import { PermissionRolesService } from './services/permission-roles.service';
 import { PermissionService } from './services/permission.service';
 import { RolesService } from './services/roles.service';
@@ -13,7 +14,10 @@ const services = [
   PermissionRolesService,
 ];
 
+const modules = [ItemsModule];
+
 @Module({
+  imports: [...modules],
   providers: [...services],
   exports: [...services],
 })
