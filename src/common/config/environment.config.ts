@@ -41,6 +41,10 @@ export class EnvironmentConfig {
   @Transform(({ value }: TTransformerValue) => (value ? +value : 86400))
   @IsInt()
   REFRESH_AUTHENTICATION_TOKEN_EXPIRES_IN!: number;
+
+  @Transform(({ value }: TTransformerValue) => (value ? +value * 1000 : 200000))
+  @IsInt()
+  MAX_IMAGE_SIZE_KB!: number;
 }
 
 export default registerAs('env', function (): EnvironmentConfig {
