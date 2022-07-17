@@ -10,8 +10,11 @@ import { DEFAULT_CONNECTION } from '../common/typeorm/connections';
 import { ConfigurationService } from '../common/configuration/configuration.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { AdministrationModule } from './administration/administration.module';
+import { ItemsModule } from './items/items.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { resolve } from 'path';
 
-const modules = [AuthenticationModule, AdministrationModule];
+const modules = [AuthenticationModule, AdministrationModule, ItemsModule];
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ const modules = [AuthenticationModule, AdministrationModule];
       useFactory: async (config: ConfigurationService) =>
         config.typeorm(DEFAULT_CONNECTION),
       inject: [ConfigurationService],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(__dirname, '../../uploads/'),
     }),
     ...modules,
   ],
