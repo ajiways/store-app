@@ -83,6 +83,11 @@ export class ItemController {
     return await this.itemService.findWhere({});
   }
 
+  @Get('list')
+  async getItemsList(@Query() query: GetInventoryItemsDTO) {
+    return await this.itemService.getItemsList(query);
+  }
+
   @Get('/my')
   async getMyItemsList(
     @Query() query: GetInventoryItemsDTO,

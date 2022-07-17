@@ -5,7 +5,9 @@ import { resolve } from 'path';
 import { EntityManager } from 'typeorm';
 import { ConfigurationService } from '../../../common/configuration/configuration.service';
 import { AbstractService } from '../../../common/services/abstract.service';
+import { GetInventoryItemsDTO } from '../dto/get-inventory-items.dto';
 import { GetItemInfoResponseDTO } from '../dto/get-item-info.response.dto';
+import { GetItemListResponseDTO } from '../dto/get-items-list.response.dto';
 import { SaveItemDTO } from '../dto/save-item.dto';
 import { SaveItemResponseDTO } from '../dto/save-item.response.dto';
 import { UpdateItemDTO } from '../dto/update-item.dto';
@@ -176,6 +178,28 @@ export class ItemService
       message: 'Succesfully',
       status: HttpStatus.OK,
       data: item,
+    });
+  }
+
+  public async getItemsList(
+    dto: GetInventoryItemsDTO,
+    manager: EntityManager | undefined,
+  ): Promise<GetItemListResponseDTO> {
+    if (!manager) {
+      manager = this.connection.manager;
+    }
+
+    const { where, take, skip } = this.findWhereParams(
+      { enabled: true },
+      { take: dto.take, skip: dto.skip },
+    );
+
+    const data = await this.findWhere(where, manager, { take, skip });
+
+    return plainToInstance(GetItemListResponseDTO, {
+      message: 'Successfully',
+      data,
+      status: HttpStatus.OK,
     });
   }
 }
