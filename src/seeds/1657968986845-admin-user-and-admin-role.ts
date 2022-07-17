@@ -3,9 +3,9 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class adminUserAndAdminRole1657968986845 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-        INSERT INTO "public"."users" ("displayed_name", "login", "password") VALUES ('Admin', 'admin', '$2a$07$glPEJOIFguDSXBDlvZMIleb8M85BkvIqa2wCSYmx3PmO7xo0JZ82G');
+        INSERT INTO "public"."users" ("displayed_name", "login", "password") VALUES ('Admin', 'admin', '$2a$07$iA.WUP7n4eUJquHD1ZU89.pmTtUmeVdRHJDJHXu0pG/8V2ODSYvfe');
     `);
-    // pass - admin
+    // pass - admin123
     await queryRunner.query(`
         INSERT INTO "public"."roles" ("name") VALUES ('Admin');
     `);

@@ -8,9 +8,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { IncomingRequestInterceptor } from '../common/interceptors/incoming-request.interceptor';
 import { DEFAULT_CONNECTION } from '../common/typeorm/connections';
 import { ConfigurationService } from '../common/configuration/configuration.service';
+import { AuthenticationModule } from './authentication/authentication.module';
 import { AdministrationModule } from './administration/administration.module';
 
-const modules = [AdministrationModule];
+const modules = [AuthenticationModule, AdministrationModule];
 
 @Module({
   imports: [

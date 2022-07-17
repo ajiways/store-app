@@ -9,4 +9,9 @@ export interface BaseServiceInterface<T> {
   findByIds(ids: string[]): Promise<T[]>;
 
   findById(id: string, manager?: EntityManager): Promise<T>;
+
+  findOneWhere(
+    conditions: FindConditions<T> | FindConditions<T>[],
+    manager?: EntityManager,
+  ): Promise<T | undefined>;
 }
