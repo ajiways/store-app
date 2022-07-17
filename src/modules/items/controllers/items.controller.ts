@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Param,
   Post,
@@ -65,5 +66,10 @@ export class ItemController {
     @Body() args: UpdateItemDTO,
   ) {
     return await this.itemService.update(files, param.id, args);
+  }
+
+  @Get('/:id')
+  async getItemInfo(@Param() param: EntityIdDTO) {
+    return await this.itemService.getItemInfo(param.id);
   }
 }

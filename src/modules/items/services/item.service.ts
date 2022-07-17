@@ -5,6 +5,7 @@ import { resolve } from 'path';
 import { EntityManager } from 'typeorm';
 import { ConfigurationService } from '../../../common/configuration/configuration.service';
 import { AbstractService } from '../../../common/services/abstract.service';
+import { GetItemInfoResponseDTO } from '../dto/get-item-info.response.dto';
 import { SaveItemDTO } from '../dto/save-item.dto';
 import { SaveItemResponseDTO } from '../dto/save-item.response.dto';
 import { UpdateItemDTO } from '../dto/update-item.dto';
@@ -159,5 +160,22 @@ export class ItemService
     }
 
     return newImages;
+  }
+
+  public async getItemInfo(
+    id: string,
+    manager: EntityManager | undefined,
+  ): Promise<GetItemInfoResponseDTO> {
+    if (!manager) {
+      manager = this.connection.manager;
+    }
+
+    const item = await this.findOneWhere({ id, enabled: true }, manager);
+
+    return plainToInstance(GetItemInfoResponseDTO, {
+      message: 'Succesfully',
+      status: HttpStatus.OK,
+      data: item,
+    });
   }
 }
