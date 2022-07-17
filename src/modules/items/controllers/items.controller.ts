@@ -68,6 +68,12 @@ export class ItemController {
     return await this.itemService.update(files, param.id, args);
   }
 
+  @RequirePermissions([EPermissions['GET ADMIN ITEMS LIST']])
+  @Get('/admin/list')
+  async getAllItems() {
+    return await this.itemService.findWhere({});
+  }
+
   @Get('/:id')
   async getItemInfo(@Param() param: EntityIdDTO) {
     return await this.itemService.getItemInfo(param.id);
