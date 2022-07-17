@@ -5,25 +5,34 @@ import {
   Inject,
   Param,
   Post,
+  Query,
   UploadedFiles,
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express/multer';
+import { UserRequest } from '../../../common/decorators/user-request';
 import { EntityIdDTO } from '../../../common/entity-id.dto';
 import { EPermissions } from '../../../common/enums/permissions.enum';
+import { UserEntity } from '../../administration/entities/user.entity';
 import { RequirePermissions } from '../../authentication/guards/roles.guard';
+import { GetInventoryItemsDTO } from '../dto/get-inventory-items.dto';
 import { SaveItemDTO } from '../dto/save-item.dto';
 import { UpdateItemDTO } from '../dto/update-item.dto';
 import { SaveFileExceptionFilter } from '../filters/save-file.exception.filter';
 import { MinumumFilesInterceptor } from '../interceptors/minimum-files.intetceptor';
+import { InventoryItemServiceInterface } from '../interfaces/inventory-item.service.interface';
 import { ItemServiceInterface } from '../interfaces/items.service.interface';
+import { InventoryItemService } from '../services/inventory-item.service';
 import { ItemService } from '../services/item.service';
 
 @Controller('item')
 export class ItemController {
   @Inject(ItemService)
   private readonly itemService: ItemServiceInterface;
+
+  @Inject(InventoryItemService)
+  private readonly inventoryItemService: InventoryItemServiceInterface;
 
   @RequirePermissions([EPermissions['CREATE ITEM']])
   @UseInterceptors(
@@ -72,6 +81,14 @@ export class ItemController {
   @Get('/admin/list')
   async getAllItems() {
     return await this.itemService.findWhere({});
+  }
+
+  @Get('/my')
+  async getMyItemsList(
+    @Query() query: GetInventoryItemsDTO,
+    @UserRequest() user: UserEntity,
+  ) {
+    return await this.inventoryItemService.getInventoryItems(query, user);
   }
 
   @Get('/:id')

@@ -7,8 +7,10 @@ import { v4 } from 'uuid';
 import path = require('path');
 import { ConfigurationService } from '../../common/configuration/configuration.service';
 import { ConfigurationModule } from '../../common/configuration/configuration.module';
+import { InventoryItemService } from './services/inventory-item.service';
+import { InventoryService } from './services/inventory.service';
 
-const services = [ItemService];
+const services = [ItemService, InventoryItemService, InventoryService];
 const controllers = [ItemController];
 const modules = [ConfigurationModule];
 
@@ -47,5 +49,6 @@ const modules = [ConfigurationModule];
   ],
   controllers: [...controllers],
   providers: [...services],
+  exports: [...services],
 })
 export class ItemsModule {}
