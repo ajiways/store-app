@@ -10,6 +10,7 @@ import { ConfigurationModule } from '../../common/configuration/configuration.mo
 
 const services = [ItemService];
 const controllers = [ItemController];
+const modules = [ConfigurationModule];
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ const controllers = [ItemController];
       }),
       inject: [ConfigurationService],
     }),
+    ...modules,
   ],
   controllers: [...controllers],
   providers: [...services],

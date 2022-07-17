@@ -45,6 +45,10 @@ export class EnvironmentConfig {
   @Transform(({ value }: TTransformerValue) => (value ? +value * 1000 : 200000))
   @IsInt()
   MAX_IMAGE_SIZE_KB!: number;
+
+  @Transform(({ value }: TTransformerValue) => (value ? +value : 6))
+  @IsInt()
+  IMAGES_COUNT_PER_ITEM!: number;
 }
 
 export default registerAs('env', function (): EnvironmentConfig {

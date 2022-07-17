@@ -19,14 +19,13 @@ export class SaveFileExceptionFilter implements ExceptionFilter {
       };
     }>();
     const status = exception.getStatus();
+    const res = exception.getResponse() as Record<string, unknown>;
 
     deleteFiles(request.files?.additional);
     deleteFiles(request.files?.main);
 
     response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      message: 'Validation error',
+      ...res,
     });
   }
 }
