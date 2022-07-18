@@ -14,12 +14,14 @@ import { ItemsModule } from './items/items.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { AccountsModule } from './accounts/accounts.module';
+import { TradeModule } from './trade/trade.module';
 
 const modules = [
   AuthenticationModule,
   AdministrationModule,
   ItemsModule,
   AccountsModule,
+  TradeModule,
 ];
 
 @Module({

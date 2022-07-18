@@ -15,7 +15,9 @@ import { ItemEntity } from '../intities/item.entity';
 
 type TTransformerValue = { value: string | number };
 
-export class SaveItemDTO implements Complete<Omit<ItemEntity, 'images'>> {
+export class SaveItemDTO
+  implements Complete<Omit<ItemEntity, 'images' | 'inTrade'>>
+{
   @IsString()
   @Length(5, 32)
   name: string;

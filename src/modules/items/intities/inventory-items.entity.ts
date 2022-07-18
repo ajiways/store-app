@@ -11,6 +11,9 @@ export class InventoryItemsEntity extends EditedEntity {
   @Column({ type: 'uuid', nullable: false })
   itemId: string;
 
+  @Column({ type: 'boolean', default: false, nullable: false })
+  inTrade: boolean;
+
   @ManyToOne(() => InventoryEntity, { nullable: false })
   private inventory: InventoryEntity;
 

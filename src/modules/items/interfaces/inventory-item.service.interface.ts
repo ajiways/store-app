@@ -10,7 +10,7 @@ export interface InventoryItemServiceInterface
   extends BaseServiceInterface<InventoryItemsEntity> {
   addToInventory(
     inventory: InventoryEntity,
-    item: ItemEntity,
+    item: ItemEntity | ItemEntity[],
     manager?: EntityManager,
   ): Promise<boolean>;
 

@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { AbstractService } from '../../../common/services/abstract.service';
 import { UserEntity } from '../../administration/entities/user.entity';
@@ -27,5 +28,24 @@ export class InventoryService
     }
 
     return await this.saveEntity({ userId: user.id }, manager);
+  }
+
+  public async getUserInventory(
+    user: UserEntity,
+    manager: EntityManager | undefined,
+  ): Promise<InventoryEntity> {
+    if (!manager) {
+      manager = this.connection.manager;
+    }
+
+    const userInventory = await this.findOneWhere({ userId: user.id }, manager);
+
+    if (!userInventory) {
+      throw new InternalServerErrorException(
+        "This user doesn't have an inventory, please, contact the system administrator",
+      );
+    }
+
+    return userInventory;
   }
 }
