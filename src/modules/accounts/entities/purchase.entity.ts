@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { CreatedEntity } from '../../../common/created.entity';
 import { UserEntity } from '../../administration/entities/user.entity';
 import { ItemEntity } from '../../items/intities/item.entity';
@@ -10,10 +10,10 @@ export class PurchaseEntity extends CreatedEntity {
   userId: string;
 
   @Column({ type: 'uuid', nullable: false })
-  transactionId: string;
+  itemId: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  purchaseId: string;
+  @Column({ type: 'uuid', nullable: false })
+  transactionId: string;
 
   @Column({ type: 'int', nullable: false })
   price: number;
@@ -24,6 +24,6 @@ export class PurchaseEntity extends CreatedEntity {
   @ManyToOne(() => ItemEntity, { nullable: false })
   private item: ItemEntity;
 
-  @ManyToOne(() => TransactionEntity, { nullable: true })
-  private transaction?: TransactionEntity;
+  @OneToOne(() => TransactionEntity, { nullable: false })
+  private transaction: TransactionEntity;
 }
