@@ -75,6 +75,7 @@ export class InventoryItemService
 
     const inventoryItems = await this.findWhere(where, manager, { take, skip });
 
+    //FIXME: если два предмета одинаковых в инвентаре, то вернется только 1
     return await this.itemService.findByIds(
       inventoryItems.map((i) => i.itemId),
       manager,
