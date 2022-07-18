@@ -31,13 +31,24 @@ export class InventoryItemService
 
   public async addToInventory(
     inventory: InventoryEntity,
-    item: ItemEntity,
+    item: ItemEntity | ItemEntity[],
     manager: EntityManager | undefined,
   ): Promise<boolean> {
     if (!manager) {
       return this.startTransaction((manager) =>
         this.addToInventory(inventory, item, manager),
       );
+    }
+
+    if (item instanceof Array) {
+      await this.saveEntities(
+        item.map((item) => {
+          return { inventoryId: inventory.id, item };
+        }),
+        manager,
+      );
+
+      return true;
     }
 
     await this.saveEntity(

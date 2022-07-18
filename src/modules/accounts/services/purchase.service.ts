@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Inject } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { ETransactionType } from '../../../common/enums/transaction-types.enum';
 import { AbstractService } from '../../../common/services/abstract.service';
@@ -55,16 +51,10 @@ export class PurchaseService
     }
 
     const item = await this.itemService.findById(itemId, manager);
-    const userInventory = await this.inventoryService.findOneWhere(
-      { userId: user.id },
+    const userInventory = await this.inventoryService.getUserInventory(
+      user,
       manager,
     );
-
-    if (!userInventory) {
-      throw new InternalServerErrorException(
-        "This user doesn't have an inventory, please, contact the system administrator",
-      );
-    }
 
     const account = await this.accountService.getUserAccount(user, manager);
 

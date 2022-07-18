@@ -6,4 +6,8 @@ import { InventoryEntity } from '../intities/inventory.entity';
 export interface InventoryServiceInterface
   extends BaseServiceInterface<InventoryEntity> {
   save(user: UserEntity, manager?: EntityManager): Promise<InventoryEntity>;
+  getUserInventory(
+    user: UserEntity,
+    manager?: EntityManager,
+  ): Promise<InventoryEntity>;
 }
