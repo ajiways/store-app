@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
+import { AccountsModule } from '../accounts/accounts.module';
 import { ItemsModule } from '../items/items.module';
 import { PermissionRolesService } from './services/permission-roles.service';
 import { PermissionService } from './services/permission.service';
@@ -14,7 +15,7 @@ const services = [
   PermissionRolesService,
 ];
 
-const modules = [ItemsModule];
+const modules = [ItemsModule, forwardRef(() => AccountsModule)];
 
 @Module({
   imports: [...modules],
