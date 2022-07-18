@@ -3,6 +3,7 @@ import { hashSync } from 'bcrypt';
 import { EntityManager } from 'typeorm';
 import { ERoles } from '../../../common/enums/roles.enum';
 import { AbstractService } from '../../../common/services/abstract.service';
+import { AccountService } from '../../accounts/services/account.service';
 import { InventoryService } from '../../items/services/inventory.service';
 import { SaveUserDTO } from '../dto/save-user.dto';
 import { UserEntity } from '../entities/user.entity';
@@ -19,6 +20,9 @@ export class UserService
 
   @Inject()
   private readonly inventoryService: InventoryService;
+
+  @Inject()
+  private readonly accountService: AccountService;
 
   protected Entity = UserEntity;
 
@@ -49,6 +53,8 @@ export class UserService
     );
 
     await this.inventoryService.save(user, manager);
+
+    await this.accountService.save(user, manager);
 
     await this.rolesService.addRoleToUser(ERoles.User, user, manager);
 
