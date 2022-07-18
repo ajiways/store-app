@@ -1,8 +1,14 @@
-import { BadRequestException, Inject } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { ETransactionType } from '../../../common/enums/transaction-types.enum';
 import { AbstractService } from '../../../common/services/abstract.service';
 import { UserEntity } from '../../administration/entities/user.entity';
+import { InventoryItemService } from '../../items/services/inventory-item.service';
+import { InventoryService } from '../../items/services/inventory.service';
 import { ItemService } from '../../items/services/item.service';
 import { PurchaseEntity } from '../entities/purchase.entity';
 import { PurchaseServiceInterface } from '../interfaces/purchase.service.interface';
@@ -21,6 +27,12 @@ export class PurchaseService
 
   @Inject()
   private readonly itemService: ItemService;
+
+  @Inject()
+  private readonly inventoryItemService: InventoryItemService;
+
+  @Inject()
+  private readonly inventoryService: InventoryService;
 
   protected Entity = PurchaseEntity;
 
@@ -43,12 +55,36 @@ export class PurchaseService
     }
 
     const item = await this.itemService.findById(itemId, manager);
+    const userInventory = await this.inventoryService.findOneWhere(
+      { userId: user.id },
+      manager,
+    );
+
+    if (!userInventory) {
+      throw new InternalServerErrorException(
+        "This user doesn't have an inventory, please, contact the system administrator",
+      );
+    }
 
     const account = await this.accountService.getUserAccount(user, manager);
 
     if (account.balance < item.price) {
       throw new BadRequestException('Not enough currency to make purchase');
     }
+
+    account.balance -= item.price;
+
+    await this.inventoryItemService.addToInventory(
+      userInventory,
+      item,
+      manager,
+    );
+
+    await this.accountService.updateEntity(
+      { id: account.id },
+      account,
+      manager,
+    );
 
     const transaction = await this.transactionService.save(
       account,
