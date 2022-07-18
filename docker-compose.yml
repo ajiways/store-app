@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - '8352:5432'
+    networks:
+      - storeapp
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  store-app:
+    image: store-app:latest
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PASS=${DB_PASS}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - APP_PORT=${APP_PORT}
+      - APP_HOST=$APP_HOST}
+      - AUTHENTICATION_TOKEN_SECRET=${AUTHENTICATION_TOKEN_SECRET}
+      - AUTHENTICATION_TOKEN_EXPIRES_IN=${AUTHENTICATION_TOKEN_EXPIRES_IN}
+      - REFRESH_AUTHENTICATION_TOKEN_SECRET=${REFRESH_AUTHENTICATION_TOKEN_SECRET}
+      - REFRESH_AUTHENTICATION_TOKEN_EXPIRES_IN=${REFRESH_AUTHENTICATION_TOKEN_EXPIRES_IN}
+      - MAX_IMAGE_SIZE_KB=${MAX_IMAGE_SIZE_KB}
+      - IMAGES_COUNT_PER_ITEM=${IMAGES_COUNT_PER_ITEM}
+    ports:
+      - '3052:${APP_PORT}'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - storeapp
+    links:
+      - db
+
+networks:
+  storeapp:
+    driver: bridge
